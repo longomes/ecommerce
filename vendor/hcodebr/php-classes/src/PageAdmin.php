@@ -4,7 +4,7 @@ namespace Hcode;
 
 class PageAdmin extends Page
 {
-    public function __construct($opts = [], $tpl_dir = '/views/admin/')
+    public function __construct($opts = [], $tpl_dir = 'views/admin/')
     {
         parent::__construct($opts, $tpl_dir);
     }
