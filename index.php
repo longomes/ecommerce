@@ -233,7 +233,7 @@ $app->get('/admin/categories/:idcategory', function($idcategory) {
 
 $app->post('/admin/categories/:idcategory', function($idcategory) {
 	User::verifyLogin();
-	
+
 	$category = new Category;
 	$category->getById((int)$idcategory);
 	$category->setValues($_POST);
@@ -241,6 +241,17 @@ $app->post('/admin/categories/:idcategory', function($idcategory) {
 
 	header('Location: /admin/categories');
 	exit;
+});
+
+$app->get('/categories/:idcaategory', function($idcategory) {
+	$category = new Category;
+	$category->getById((int)$idcategory);
+
+	$page = new Page;
+	$page->setTpl('category', [
+		'category' => $category->getValues(),
+		'products' => []
+	]);
 });
 
 $app->run();

@@ -28,6 +28,7 @@ class Category extends Model
         ]);
 
         $this->setValues($results[0]);
+        Category::updateFile();
     }
 
     public function getById($idcategory)
@@ -60,6 +61,23 @@ class Category extends Model
             ]
         );
 
+        Category::updateFile();
+    }
 
+    public static function updateFile()
+    {
+        $categories = Category::listAll();
+        
+        $html = [];
+
+        foreach ($categories as $row) {
+            array_push($html, 
+                '<li><a href="/categories/' . 
+                $row['idcategory'] . '">' . $row['descategory'] . '</a></li>'
+            );
+        }
+
+        $file = $_SERVER['DOCUMENT_ROOT'] . 'views' . DIRECTORY_SEPARATOR . 'categories-menu.html';
+        file_put_contents($file, implode(PHP_EOL, $html));
     }
 }
