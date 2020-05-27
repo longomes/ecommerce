@@ -2,11 +2,16 @@
 
 use \Hcode\Page;
 use \Hcode\Model\Category;
+use \Hcode\Model\Product;
 
 // Home
-$app->get('/', function() {    
+$app->get('/', function() {
+	$products = Product::listAll();
+	
 	$page = new Page;
-	$page->setTpl('main');
+	$page->setTpl('main',[
+		'products' => Product::checkList($products)
+	]);
 });
 
 $app->get('/categories/:idcaategory', function($idcategory) {
