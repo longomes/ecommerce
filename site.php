@@ -14,13 +14,13 @@ $app->get('/', function() {
 	]);
 });
 
-$app->get('/categories/:idcaategory', function($idcategory) {
+$app->get('/categories/:idcategory', function($idcategory) {
 	$category = new Category;
 	$category->getById((int)$idcategory);
 
 	$page = new Page;
 	$page->setTpl('category', [
 		'category' => $category->getValues(),
-		'products' => []
+		'products' => Product::checkList($category->getRelated())
 	]);
 });

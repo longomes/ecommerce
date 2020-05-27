@@ -5,7 +5,7 @@ ini_set('display_errors', true);
 
 session_start();
 
-require_once("vendor/autoload.php");
+require_once 'vendor/autoload.php';
 
 use \Slim\Slim;
 
