@@ -52,11 +52,6 @@ $app->post('/admin/users/create', function() {
 	User::verifyLogin();
 
 	$_POST['inadmin'] = (isset($_POST['inadmin'])) ? 1 : 0;
-	$_POST['despassword'] = password_hash(
-		$_POST['despassword'], 
-		PASSWORD_DEFAULT, 
-		['cost' => 12]
-	);
 
 	$user = new User;
 	$user->setValues($_POST);
