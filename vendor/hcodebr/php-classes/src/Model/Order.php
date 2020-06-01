@@ -31,6 +31,7 @@ class Order extends Model
     public function getById($idorder)
     {
         $sql = new Sql;
+        
         $results = $sql->select(
             'SELECT * FROM tb_orders a 
             INNER JOIN tb_ordersstatus b USING(idstatus) 
