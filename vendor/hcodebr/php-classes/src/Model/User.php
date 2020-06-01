@@ -281,13 +281,7 @@ class User extends Model
             WHERE iduser = :iduser', 
             [
                 'iduser' => $this->getiduser(),
-                ':despassword' => password_hash(
-                    $password, 
-                    PASSWORD_DEFAULT, 
-                    [
-                        'cost' => 12
-                    ]
-                )
+                ':despassword' => User::getPasswordHash($password)
             ]
         );
     }
