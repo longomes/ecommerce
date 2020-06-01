@@ -28,7 +28,7 @@ $app->get('/admin/categories', function() {
 		if (trim($search)) $build['search'] = $search;
 
 		array_push($pages, [
-			'href' => '/admin/users?' . http_build_query($build),
+			'href' => '/admin/categories?' . http_build_query($build),
 			'text' => $x+1
 		]);
 	}	
