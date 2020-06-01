@@ -129,4 +129,61 @@ class Order extends Model
     {
         $_SESSION[Order::SUCCESS] = NULL;
     }
+
+    public static function getPages($page = 1, $itensPerPage = 10)
+    {
+        $start = ($page-1) * $itensPerPage;
+
+        $sql = new Sql;
+
+        $results = $sql->select(
+            "SELECT SQL_CALC_FOUND_ROWS * FROM tb_orders a 
+            INNER JOIN tb_ordersstatus b USING(idstatus) 
+            INNER JOIN tb_carts c USING(idcart) 
+            INNER JOIN tb_users d ON d.iduser = a.iduser 
+            INNER JOIN tb_addresses e USING(idaddress) 
+            INNER JOIN tb_persons f ON f.idperson = d.idperson 
+            ORDER BY a.dtregister DESC 
+            LIMIT {$start}, {$itensPerPage}"
+        );
+
+        $total = $sql->select('SELECT FOUND_ROWS() AS total');
+
+        return [
+            'data' => $results,
+            'total' => (int) $total[0]['total'],
+            'pages' => ceil($total[0]['total'] / $itensPerPage)
+        ];
+    }
+
+    public static function getPagesSearch($search, $page = 1, $itensPerPage = 10)
+    {
+        $start = ($page-1) * $itensPerPage;
+
+        $sql = new Sql;
+
+        $results = $sql->select(
+            "SELECT SQL_CALC_FOUND_ROWS * FROM tb_orders a 
+            INNER JOIN tb_ordersstatus b USING(idstatus) 
+            INNER JOIN tb_carts c USING(idcart) 
+            INNER JOIN tb_users d ON d.iduser = a.iduser 
+            INNER JOIN tb_addresses e USING(idaddress) 
+            INNER JOIN tb_persons f ON f.idperson = d.idperson 
+            WHERE a.idorder = :idorder OR f.desperson LIKE :search 
+            ORDER BY a.dtregister DESC 
+            LIMIT {$start}, {$itensPerPage}",
+            [
+                'idorder' => $search,
+                ':search' => "%{$search}%"
+            ]
+        );
+
+        $total = $sql->select('SELECT FOUND_ROWS() AS total');
+
+        return [
+            'data' => $results,
+            'total' => (int) $total[0]['total'],
+            'pages' => ceil($total[0]['total'] / $itensPerPage)
+        ];
+    }
 }
