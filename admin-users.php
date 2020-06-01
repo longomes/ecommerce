@@ -6,11 +6,36 @@ use \Hcode\Model\User;
 $app->get('/admin/users', function() {
 	User::verifyLogin();
 
-	$users = User::listAll();
+	$search = (isset($_GET['search'])) ? $_GET['search'] : '';
+	
+	$idpage = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
+	
+	if (trim($search) != '') {
+		$users = User::getPagesSearch($search, $idpage);
+	} else {
+		$users = User::getPages($idpage);
+	}
+
+	$pages = [];
+
+	for ($x=0; $x < $users['pages']; $x++) {
+		$build = [
+			'page' => $x+1
+		];
+
+		if (trim($search)) $build['search'] = $search;
+
+		array_push($pages, [
+			'href' => '/admin/users?' . http_build_query($build),
+			'text' => $x+1
+		]);
+	}
 
 	$page = new PageAdmin;
 	$page->setTpl('users', [
-		'users' => $users
+		'users' => $users['data'],
+		'search' => $search,
+		'pages' => $pages
 	]);
 });
 
